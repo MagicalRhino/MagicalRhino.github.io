@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>河大明伦校园集市热榜</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 15px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+        
+        .hot-list {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .hot-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .hot-item:last-child {
+            border-bottom: none;
+        }
+        
+        .hot-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .rank {
+            width: 24px;
+            height: 24px;
+            background-color: #ff4e4e;
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        
+        .rank.top3 {
+            background-color: #ff4e4e;
+        }
+        
+        .rank.other {
+            background-color: #f0f0f0;
+            color: #999;
+        }
+        
+        .content {
+            flex: 1;
+        }
+        
+        .hot-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+        
+        .hot-desc {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .hot-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #666;
+            margin-right: 6px;
+        }
+        
+        .hot-tag.hot {
+            background-color: #fff0f0;
+            color: #ff4e4e;
+        }
+        
+        .hot-tag.new {
+            background-color: #f0f8ff;
+            color: #1e88e5;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 80%;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff4e4e;
+        }
+        
+        .modal-text {
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+        
+        .modal-close {
+            padding: 8px 20px;
+            background-color: #ff4e4e;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMTcuNTIzIDIgMTIgMnptMCAxOGMtNC40MTEgMC04LTMuNTg5LTgtOHMzLjU4OS04IDgtOCA4IDMuNTg5IDggOC0zLjU4OSA4LTggOHptLTEtMTNoMnYxM2gtMlY3eiIgZmlsbD0iIzAwOTlGRiIvPjwvc3ZnPg==" alt="校徽" class="logo">
+            <div>
+                <div class="title">河大明伦校园集市热榜</div>
+                <div class="subtitle">河南大学明伦校区 · 实时热点</div>
+            </div>
+        </div>
+        
+        <div class="hot-list">
+            <div class="hot-item" onclick="showModal('保研政策临时调整')">
+                <div class="rank top3">1</div>
+                <div class="content">
+                    <div class="hot-title">【紧急】保研政策临时调整，绩点要求大幅降低！</div>
+                    <div>
+                        <span class="hot-tag hot">爆</span>
+                        <span class="hot-tag new">新</span>
+                        <span class="hot-desc">阅读量 12.8万 · 讨论 3.2万</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('杭州实习内推')">
+                <div class="rank top3">2</div>
+                <div class="content">
+                    <div class="hot-title">杭州某大厂实习内推名额，日薪500+包住宿！速抢</div>
+                    <div>
+                        <span class="hot-tag hot">热</span>
+                        <span class="hot-desc">阅读量 8.6万 · 讨论 1.5万</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('驾照考试新规')">
+                <div class="rank top3">3</div>
+                <div class="content">
+                    <div class="hot-title">驾照考试新规：科目二取消坡道起步，通过率提升40%</div>
+                    <div>
+                        <span class="hot-tag new">新</span>
+                        <span class="hot-desc">阅读量 7.2万 · 讨论 9千</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('九重紫剧组')">
+                <div class="rank other">4</div>
+                <div class="content">
+                    <div class="hot-title">《九重紫》剧组来我校取景，招募群演日薪800元</div>
+                    <div class="hot-desc">阅读量 6.5万 · 讨论 5千</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('食堂价格调整')">
+                <div class="rank other">5</div>
+                <div class="content">
+                    <div class="hot-title">食堂价格全面下调，两荤一素套餐仅需6元！</div>
+                    <div class="hot-desc">阅读量 5.8万 · 讨论 4千</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('宿舍空调安装')">
+                <div class="rank other">6</div>
+                <div class="content">
+                    <div class="hot-title">学生宿舍将全面安装空调，预计五一前完工</div>
+                    <div class="hot-desc">阅读量 5.2万 · 讨论 3千</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('图书馆延长开放')">
+                <div class="rank other">7</div>
+                <div class="content">
+                    <div class="hot-title">图书馆将24小时开放，增设夜宵供应区</div>
+                    <div class="hot-desc">阅读量 4.7万 · 讨论 2千</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('校园网免费')">
+                <div class="rank other">8</div>
+                <div class="content">
+                    <div class="hot-title">校园网将全面免费，网速提升至1000Mbps</div>
+                    <div class="hot-desc">阅读量 4.3万 · 讨论 1千</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('校车新线路')">
+                <div class="rank other">9</div>
+                <div class="content">
+                    <div class="hot-title">校车新增直达郑州东站线路，全程仅需40分钟</div>
+                    <div class="hot-desc">阅读量 3.9万 · 讨论 800</div>
+                </div>
+            </div>
+            
+            <div class="hot-item" onclick="showModal('毕业典礼')">
+                <div class="rank other">10</div>
+                <div class="content">
+                    <div class="hot-title">周杰伦确认出席我校毕业典礼并献唱3首歌曲</div>
+                    <div class="hot-desc">阅读量 3.5万 · 讨论 600</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            更新时间：2023年4月1日 12:00 · 河南大学明伦校区校园集市
+        </div>
+    </div>
+    
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle">标题</div>
+            <div class="modal-text">愚人节快乐！🎉<br>所有消息均为虚构，仅供娱乐~</div>
+            <button class="modal-close" onclick="closeModal()">我知道了</button>
+        </div>
+    </div>
+    
+    <script>
+        function showModal(title) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('myModal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+        
+        // 点击模态框外部也可以关闭
+        document.getElementById('myModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
