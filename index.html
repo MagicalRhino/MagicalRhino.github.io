@@ -35,6 +35,7 @@
             width: 40px;
             height: 40px;
             margin-right: 10px;
+            object-fit: contain;
         }
         
         .title {
@@ -62,6 +63,7 @@
             display: flex;
             align-items: center;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
         
         .hot-item:last-child {
@@ -157,12 +159,15 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 20px;
-            color: #ff4e4e;
         }
         
         .modal-text {
             font-size: 18px;
             margin-bottom: 25px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         .modal-close {
@@ -181,12 +186,31 @@
             font-size: 12px;
             color: #999;
         }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.3);
+            border-radius: 50%;
+            border-top-color: #ff4e4e;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJzNC40NzcgMTAgMTAgMTAgMTAtNC40NzcgMTAtMTBTMTcuNTIzIDIgMTIgMnptMCAxOGMtNC40MTEgMC04LTMuNTg5LTgtOHMzLjU4OS04IDgtOCA4IDMuNTg5IDggOC0zLjU4OSA4LTggOHptLTEtMTNoMnYxM2gtMlY3eiIgZmlsbD0iIzAwOTlGRiIvPjwvc3ZnPg==" alt="校徽" class="logo">
+            <!-- 校徽放置说明：
+                 1. 准备校徽图片文件（建议PNG格式，透明背景）
+                 2. 将文件命名为logo.png并放在与HTML同目录下
+                 3. 或者替换下方src属性为您的校徽在线链接 -->
+            <img src="logo.png" alt="河南大学校徽" class="logo">
             <div>
                 <div class="title">河大明伦校园集市热榜</div>
                 <div class="subtitle">河南大学明伦校区 · 实时热点</div>
@@ -243,46 +267,6 @@
                     <div class="hot-desc">阅读量 5.8万 · 讨论 4千</div>
                 </div>
             </div>
-            
-            <div class="hot-item" onclick="showModal('宿舍空调安装')">
-                <div class="rank other">6</div>
-                <div class="content">
-                    <div class="hot-title">学生宿舍将全面安装空调，预计五一前完工</div>
-                    <div class="hot-desc">阅读量 5.2万 · 讨论 3千</div>
-                </div>
-            </div>
-            
-            <div class="hot-item" onclick="showModal('图书馆延长开放')">
-                <div class="rank other">7</div>
-                <div class="content">
-                    <div class="hot-title">图书馆将24小时开放，增设夜宵供应区</div>
-                    <div class="hot-desc">阅读量 4.7万 · 讨论 2千</div>
-                </div>
-            </div>
-            
-            <div class="hot-item" onclick="showModal('校园网免费')">
-                <div class="rank other">8</div>
-                <div class="content">
-                    <div class="hot-title">校园网将全面免费，网速提升至1000Mbps</div>
-                    <div class="hot-desc">阅读量 4.3万 · 讨论 1千</div>
-                </div>
-            </div>
-            
-            <div class="hot-item" onclick="showModal('校车新线路')">
-                <div class="rank other">9</div>
-                <div class="content">
-                    <div class="hot-title">校车新增直达郑州东站线路，全程仅需40分钟</div>
-                    <div class="hot-desc">阅读量 3.9万 · 讨论 800</div>
-                </div>
-            </div>
-            
-            <div class="hot-item" onclick="showModal('毕业典礼')">
-                <div class="rank other">10</div>
-                <div class="content">
-                    <div class="hot-title">周杰伦确认出席我校毕业典礼并献唱3首歌曲</div>
-                    <div class="hot-desc">阅读量 3.5万 · 讨论 600</div>
-                </div>
-            </div>
         </div>
         
         <div class="footer">
@@ -293,15 +277,40 @@
     <div class="modal" id="myModal">
         <div class="modal-content">
             <div class="modal-title" id="modalTitle">标题</div>
-            <div class="modal-text">愚人节快乐！🎉<br>所有消息均为虚构，仅供娱乐~</div>
+            <div class="modal-text" id="modalText"></div>
             <button class="modal-close" onclick="closeModal()">我知道了</button>
         </div>
     </div>
     
     <script>
         function showModal(title) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('myModal').style.display = 'flex';
+            const modal = document.getElementById('myModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+            
+            modalTitle.textContent = title;
+            modal.style.display = 'flex';
+            
+            // 清空内容
+            modalText.innerHTML = '';
+            
+            // 第一步：人脸识别中
+            modalText.innerHTML = '<div><span class="loading"></span>人脸识别中...</div>';
+            
+            // 第二步：1秒后显示人脸识别成功
+            setTimeout(() => {
+                modalText.innerHTML = '<div><span style="color:green">✓</span> 人脸识别成功，支付中...</div>';
+                
+                // 第三步：2秒后显示支付成功
+                setTimeout(() => {
+                    modalText.innerHTML = '<div><span style="color:green">✓</span> 支付成功！</div>';
+                    
+                    // 第四步：3秒后显示愚人节快乐
+                    setTimeout(() => {
+                        modalText.innerHTML = '愚人节快乐！🎉<br>所有消息均为虚构，仅供娱乐~';
+                    }, 1000);
+                }, 1000);
+            }, 1000);
         }
         
         function closeModal() {
